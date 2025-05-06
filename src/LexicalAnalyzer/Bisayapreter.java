@@ -1,0 +1,123 @@
+package LexicalAnalyzer;
+
+import SematicAnalyzer.Interpreter;
+import SyntaxAnalyzer.Parser;
+import SyntaxAnalyzer.Stmt;
+import Utility.RuntimeError;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class Bisayapreter {
+    private static final Interpreter interpreter = new Interpreter();
+    static boolean hadError = false;
+    static boolean hadRuntimeError = false;
+
+    public static void main(String[] args) throws IOException {
+        if (args.length > 1) {
+            System.out.println("Usage: jlox [script]");
+            System.exit(64);
+        } else if (args.length == 1) {
+            runFile(args[0]);
+        } else {
+            runPrompt();
+        }
+    }
+
+    private static void runFile(String path) throws IOException {
+        byte[] bytes = Files.readAllBytes((Paths.get(path)));
+        run(new String(bytes, Charset.defaultCharset()));
+
+        // Indicate an error in the exit code
+        if(hadError) System.exit(65);
+        if(hadRuntimeError) System.exit(70);
+    }
+
+      // For console input
+//    private static void runPrompt() throws IOException {
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//        StringBuilder sourceBuilder = new StringBuilder();
+//
+//        System.out.println("Type ':run' to execute your code.");
+//
+//        while (true) {
+//            System.out.print("> ");
+//            String line = reader.readLine();
+//
+//            if (line == null || line.equals(":exit")) break;
+//
+//            if (line.equals(":run")) {
+//                run(sourceBuilder.toString());
+//                sourceBuilder.setLength(0); // Clear after running
+//                hadError = false;
+//            } else {
+//                sourceBuilder.append(line).append("\n");
+//            }
+//        }
+//    }
+
+    // For file input
+    private static void runPrompt() throws IOException {
+        // Read the entire file content as a single string
+        BufferedReader reader = new BufferedReader(new FileReader("src/Test/incs/inc1/test11.bpp"));
+        StringBuilder sourceBuilder = new StringBuilder();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sourceBuilder.append(line).append("\n"); // Append each line with a newline
+        }
+        reader.close();
+
+        // Pass the entire source to the Lexer
+        run(sourceBuilder.toString());
+    }
+
+    private static void run(String source) {
+        Iskaner scanner = new Iskaner(source);
+        List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        List<Stmt> statements = parser.parse();
+
+        // Stop if there was a syntax error
+        if(hadError) return;
+
+        interpreter.interpret(statements);
+
+        System.out.println();
+        System.out.println("------------------");
+        System.out.println("-- Program Done --");
+        System.out.println("------------------");
+        for (Token token : tokens) {
+            System.out.println(token);
+        }
+    }
+
+    static void error(int line, String message) {
+        report(line, "", message);
+    }
+
+    private static void report(int line, String where, String message) {
+        System.err.println("[line " + line + "] Error" + where + ": " + message);
+        hadError = true;
+    }
+
+    public static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
+    }
+
+    public static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() +
+                "\n[line " + error.getToken().line + "]");
+        hadRuntimeError = true;
+    }
+}

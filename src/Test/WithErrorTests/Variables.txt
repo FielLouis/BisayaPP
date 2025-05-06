@@ -1,0 +1,6 @@
+SUGOD
+    MUGNA NUMERO x = "DILI", z = 20 -- should produce error
+    MUGNA TIPIK y = 'g', w = 10.0-- should produce error
+    MUGNA LETRA a = 'hello'-- should produce error
+    MUGNA TINUOD t = "OO"
+KATAPUSAN

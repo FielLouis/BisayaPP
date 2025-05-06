@@ -1,0 +1,6 @@
+SUGOD
+    MUGNA NUMERO x = 10, z = 20
+    IPAKITA: x & z
+    x = z = 100
+    IPAKITA: x & z
+KATAPUSAN

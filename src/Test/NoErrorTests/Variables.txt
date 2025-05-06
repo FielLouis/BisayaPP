@@ -1,0 +1,8 @@
+SUGOD
+    MUGNA NUMERO x = 10, z = 20
+    MUGNA TIPIK y = 5.0, w = 10.0 --print like a float
+    MUGNA LETRA a = 'c' --handle single quote
+    MUGNA TINUOD t = "OO"
+    -- comment
+    IPAKITA: x & z & y & w & a & t
+KATAPUSAN

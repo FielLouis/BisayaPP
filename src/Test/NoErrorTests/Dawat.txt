@@ -1,0 +1,5 @@
+SUGOD
+    MUGNA TINUOD x = "DILI",y = "OO"
+    -- ignore rani
+    IPAKITA: x
+KATAPUSAN

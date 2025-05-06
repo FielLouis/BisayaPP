@@ -1,0 +1,13 @@
+SUGOD
+    MUGNA NUMERO ctr = 1
+    SAMTANG (ctr <= 20)
+    PUNDOK{
+        IPAKITA: ctr & ' '
+
+        KUNG(ctr==10)
+        PUNDOK{
+            IPAKITA $
+        }
+        ctr++
+    }
+KATAPUSAN

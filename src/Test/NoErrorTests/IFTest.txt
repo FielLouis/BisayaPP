@@ -1,0 +1,16 @@
+SUGOD
+    MUGNA NUMERO x = 10
+    MUGNA TINUOD y = "OO"
+    MUGNA TINUOD z = "DILI"
+    KUNG(z O y)
+    PUNDOK{
+        IPAKITA: "10 ay mas malaki sa 5"
+    }KUNG DILI(x < 5)
+    PUNDOK{
+        IPAKITA: "5 ay mas malaki sa 10"
+    }
+    KUNG WALA
+    PUNDOK{
+        IPAKITA: "WALA WALA WALA"
+    }
+KATAPUSAN

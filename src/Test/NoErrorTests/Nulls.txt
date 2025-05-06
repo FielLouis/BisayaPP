@@ -1,0 +1,7 @@
+SUGOD
+    MUGNA NUMERO x,y,z
+    IPAKITA: x
+    DAWAT: x
+    IPAKITA:x
+
+KATAPUSAN

@@ -1,0 +1,13 @@
+SUGOD
+    MUGNA TIPIK x
+    MUGNA NUMERO y = 20
+    MUGNA LETRA a = 'c'
+    MUGNA TINUOD t = "OO"
+    MUGNA TINUOD f = (10 > 20)
+
+    y = 10
+    a = 'd'
+    t = "DILI"
+    f = (10 < 20)
+    IPAKITA: x
+KATAPUSAN
