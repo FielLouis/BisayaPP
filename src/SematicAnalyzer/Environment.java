@@ -27,7 +27,7 @@ public class Environment {
 
         if(enclosing != null) return enclosing.get(name);
 
-        throw new RuntimeError(name, "Undefined variable '" + name.getLexeme() + "'.");
+        throw new RuntimeError(name, "Unsa ni sya '" + name.getLexeme() + "'.");
     }
 
     void assign(Token name, Object value) {
@@ -41,7 +41,7 @@ public class Environment {
             return;
         }
 
-        throw new RuntimeError(name, "Undefined variable '" + name.getLexeme() + "'.");
+        throw new RuntimeError(name, "Unsa ni sya '" + name.getLexeme() + "'.");
     }
 
     void define(String name, Object value) {
@@ -57,7 +57,7 @@ public class Environment {
         if (types.containsKey(name)) {
             return types.get(name);
         }
-        throw new RuntimeError(new Token(TokenType.IDENTIFIER, name, null, 0), "Undefined variable type '" + name + "'.");
+        throw new RuntimeError(new Token(TokenType.IDENTIFIER, name, null, 0), "Unsa d ay ni sya nga type '" + name + "'.");
     }
 
     boolean containsKey(String name) {

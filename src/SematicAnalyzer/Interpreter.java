@@ -53,12 +53,12 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
 
     private void checkNumberOperand(Token operator, Object operand) {
         if (operand instanceof Double) return;
-        throw new RuntimeError(operator, "Operand must be a number.");
+        throw new RuntimeError(operator, "Number dapat ang operand.");
     }
 
     private void checkNumberOperands(Token operator, Object left, Object right) {
         if (left instanceof Double && right instanceof Double) return;
-        throw new RuntimeError(operator, "Operands must be numbers.");
+        throw new RuntimeError(operator, "Numbers dapat ang mga operands.");
     }
 
     private boolean isTruthy(Object object) {
@@ -130,7 +130,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
 
             // Check if the variable exists in the environment
             if (!environment.containsKey(varName)) {
-                throw new RuntimeException("Undefined variable: " + varName);
+                throw new RuntimeException("Unsa ni sya nga variable: " + varName);
             }
         }
 
@@ -192,13 +192,17 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
                 value = evaluate(var.initializer);
 
                 if (var.getType().equals("NUMERO") && !(value instanceof Double)) {
-                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " must be of type NUMERO.");
-                } else if (var.getType().equals("TIPIK") && !(value instanceof Float)) {
-                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " must be of type TIPIK.");
+                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " kay NUMERO dapat.");
+                } else if (var.getType().equals("TIPIK")) {
+                        if (value instanceof Double) {
+                            value = ((Double) value).floatValue(); // Convert Double to Float
+                        } else if (!(value instanceof Float)) {
+                            throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " kay TIPIK dapat.");
+                        }
                 } else if (var.getType().equals("LETRA") && !(value instanceof Character)) {
-                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " must be of type LETRA.");
+                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " kay LETRA dapat.");
                 } else if (var.getType().equals("TINUOD") && (!(value instanceof Boolean))) {
-                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " must be of type TINUOD.");
+                    throw new RuntimeError(var.name, "Variable " + var.name.getLexeme() + " kay TINUOD dapat.");
                 }
             }
             environment.define(var.name.getLexeme(), value, var.getType());
@@ -210,11 +214,11 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
         List<Token> variables = inputStmt.getVariableNames();
 
         // Prompt once for all variables
-        System.out.print("Enter value");
+        System.out.print("Unsa man ag value");
         if(variables.size() > 1) {
-            System.out.print("s (comma-separated)");
+            System.out.print(" nila (comma-separated)");
         }
-        System.out.print(" for ( ");
+        System.out.print(" ni ( ");
         for (Token var : variables) {
             System.out.print(var.getLexeme() + " ");
         }
@@ -225,7 +229,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
         String[] inputs = inputLine.split(",");
 
         if (inputs.length != variables.size()) {
-            throw new RuntimeError(variables.get(0), "Expected " + variables.size() + " inputs, but got " + inputs.length);
+            throw new RuntimeError(variables.get(0), "Expected " + variables.size() + " inputs, pero nakuha kay " + inputs.length);
         }
 
         for (int i = 0; i < variables.size(); i++) {
@@ -236,7 +240,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
             String varType = environment.getType(varName.getLexeme());
 
             if (varType == null && existing == null) {
-                throw new RuntimeError(varName, "Variable type is undefined.");
+                throw new RuntimeError(varName, "Unsa ni siya nga Variable type.");
             }
 
             try {
@@ -248,13 +252,13 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
                     } else if (inputValue.equalsIgnoreCase("DILI")) {
                         environment.assign(varName, false);
                     } else {
-                        throw new RuntimeError(varName, "TINUOD should be OO or DILI.");
+                        throw new RuntimeError(varName, "TINUOD dapat OO o DILI ra lageh naunsa man ka.");
                     }
                 } else if (varType != null && varType.equals("LETRA")) {
                     if (inputValue.length() == 1) {
                         environment.assign(varName, inputValue.charAt(0));
                     } else {
-                        throw new RuntimeError(varName, "Expected a single character for LETRA.");
+                        throw new RuntimeError(varName, "Expected usa ra ka LETRA.");
                     }
                 } else if (existing instanceof Double) {
                     environment.assign(varName, Double.parseDouble(inputValue));
@@ -264,7 +268,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
                     } else if (inputValue.equalsIgnoreCase("DILI")) {
                         environment.assign(varName, false);
                     } else {
-                        throw new RuntimeError(varName, "Expected OO or DILI for boolean input.");
+                        throw new RuntimeError(varName, "Expected OO o DILI para sa TIPIK.");
                     }
                 } else if (existing instanceof Character) {
                     environment.assign(varName, inputValue.charAt(0));
@@ -272,7 +276,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
                     environment.assign(varName, inputValue);
                 }
             } catch (NumberFormatException e) {
-                throw new RuntimeError(varName, "Invalid number input: " + inputValue);
+                throw new RuntimeError(varName, "Dili lage ni siya mao: " + inputValue);
             }
         }
 
@@ -282,7 +286,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
     @Override
     public Object visitAssignExpr(Expr.Assign expr) {
         Object value = evaluate(expr.value);
-        String type = environment.getType(expr.name.getLexeme()); //naay problema diri
+        String type = environment.getType(expr.name.getLexeme());
 
         if (value == null) {
             environment.assign(expr.name, null);
@@ -330,7 +334,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
                 if (left instanceof Character && right instanceof Character) {
                     return (Character)left + (Character) right;
                 }
-                throw new RuntimeError(expr.operator, "Operands must be two numbers, two strings, or two characters.");
+                throw new RuntimeError(expr.operator, "Operands dapat ay duha ka numbers, strings, o characters.");
             case GREATER_THAN:
                 checkNumberOperands(expr.operator, left, right);
                 return (double)left > (double)right;
@@ -367,7 +371,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
 
             return newValue;
         }
-        throw new RuntimeError(expr.name, "Only numbers can be incremented.");
+        throw new RuntimeError(expr.name, "Numbers lang ma increment.");
     }
 
     @Override
@@ -382,7 +386,7 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
             return newValue;
         }
 
-        throw new RuntimeError(expr.name, "Only numbers can be decremented.");
+        throw new RuntimeError(expr.name, "Numbers lang ma decrement.");
     }
 
     @Override

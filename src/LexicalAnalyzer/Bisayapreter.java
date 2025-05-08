@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Bisayapreter {
     private static final Interpreter interpreter = new Interpreter();
-    static boolean hadError = false;
-    static boolean hadRuntimeError = false;
+    public static boolean hadError = false;
+    public static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -65,16 +65,15 @@ public class Bisayapreter {
     // For file input
     private static void runPrompt() throws IOException {
         // Read the entire file content as a single string
-        BufferedReader reader = new BufferedReader(new FileReader("src/Test/incs/inc1/test11.bpp"));
+        BufferedReader reader = new BufferedReader(new FileReader("src/Test/NoErrorTests/Dawat.txt"));
         StringBuilder sourceBuilder = new StringBuilder();
 
         String line;
         while ((line = reader.readLine()) != null) {
-            sourceBuilder.append(line).append("\n"); // Append each line with a newline
+            sourceBuilder.append(line).append("\n");
         }
         reader.close();
 
-        // Pass the entire source to the Lexer
         run(sourceBuilder.toString());
     }
 
@@ -89,13 +88,16 @@ public class Bisayapreter {
 
         interpreter.interpret(statements);
 
-        System.out.println();
-        System.out.println("------------------");
-        System.out.println("-- Program Done --");
-        System.out.println("------------------");
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+        if(!hadRuntimeError && !hadError)
+            System.out.println();
+            System.out.println("------------------");
+            System.out.println("-- Program Done --");
+            System.out.println("------------------");
+
+        // Checking tokens
+//        for (Token token : tokens) {
+//            System.out.println(token);
+//        }
     }
 
     static void error(int line, String message) {

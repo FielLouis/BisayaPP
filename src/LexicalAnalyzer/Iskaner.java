@@ -62,7 +62,6 @@ public class Iskaner {
             case '$': addToken(TokenType.NEXT_LINE); break;
             case ':': addToken(TokenType.COLON); break;
             case '*': addToken(TokenType.MULTIPLY); break;
-            case '%': addToken(TokenType.MODULO); break;
             case '+':
                 if (match('+')) {
                     addToken(TokenType.INCREMENT);
@@ -94,6 +93,7 @@ public class Iskaner {
                     addToken(TokenType.MINUS);
                 }
                 break;
+            case '%': addToken(TokenType.MODULO); break;
             case ' ':
             case '\r':
             case '\t':
@@ -125,11 +125,11 @@ public class Iskaner {
             return;
         }
 
-        char c = advance(); // Get the character inside the single quote
+        char c = advance();
 
         // Check for escape characters like '\n'
         if (c == '\\' && !isAtEnd()) {
-            c = advance(); // Advance to get the actual escaped character
+            c = advance();
         }
 
         if (peek() != '\'') {
@@ -177,7 +177,7 @@ public class Iskaner {
             return;
         }
 
-        addToken(TokenType.ESCAPE_CODE, value); // or whatever token type you want
+        addToken(TokenType.ESCAPE_CODE, value);
     }
 
     private void identifier() {
@@ -221,7 +221,11 @@ public class Iskaner {
         }
 
         if(text.equals("SAMTANG")) {
-
+//            int saveCurrent = current;
+//            int saveStart = start;
+//
+            addToken(TokenType.WHILE);
+            return;
         }
 
         if (type == null) type = TokenType.IDENTIFIER;
@@ -275,7 +279,7 @@ public class Iskaner {
         }
 
         if(isAtEnd()) {
-            Bisayapreter.error(line, "Unterminated string.");
+            Bisayapreter.error(line, "Unterminated nga string OI.");
             return;
         }
 

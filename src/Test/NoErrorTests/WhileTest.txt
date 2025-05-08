@@ -6,7 +6,7 @@ SUGOD
 
         KUNG(ctr==10)
         PUNDOK{
-            IPAKITA $
+            IPAKITA: $
         }
         ctr++
     }
