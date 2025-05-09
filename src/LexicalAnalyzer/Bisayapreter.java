@@ -81,18 +81,29 @@ public class Bisayapreter {
         Iskaner scanner = new Iskaner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        List<Stmt> statements = parser.parse();
+
+        List<Stmt> statements = null;
+        try {
+            statements = parser.parse();
+        } catch (Parser.ParseError e) {
+            return;
+        }
 
         // Stop if there was a syntax error
         if(hadError) return;
 
-        interpreter.interpret(statements);
+        try {
+            interpreter.interpret(statements);
+        } catch (RuntimeError error) {
+            return;
+        }
 
-        if(!hadRuntimeError && !hadError)
+        if(!hadError && !hadRuntimeError) {
             System.out.println();
             System.out.println("------------------");
             System.out.println("-- Program Done --");
             System.out.println("------------------");
+        }
 
         // Checking tokens
 //        for (Token token : tokens) {
@@ -118,8 +129,16 @@ public class Bisayapreter {
     }
 
     public static void runtimeError(RuntimeError error) {
-        System.err.println(error.getMessage() +
-                "\n[line " + error.getToken().line + "]");
+        System.err.println("[line " + error.getToken().line + "] " + error.getMessage());
         hadRuntimeError = true;
+    }
+
+    public static void reportRuntimeError(RuntimeError error) {
+        if (error.getToken() != null) {
+            System.err.println("[line " + error.getToken().line + "] Error at '" +
+                    error.getToken().lexeme + "': " + error.getMessage());
+        } else {
+            System.err.println("Runtime Error: " + error.getMessage());
+        }
     }
 }

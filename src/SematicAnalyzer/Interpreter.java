@@ -53,17 +53,26 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
 
     private void checkNumberOperand(Token operator, Object operand) {
         if (operand instanceof Double) return;
+        if (operand instanceof  Integer) return;
         throw new RuntimeError(operator, "Number dapat ang operand.");
     }
 
     private void checkNumberOperands(Token operator, Object left, Object right) {
-        if (left instanceof Double && right instanceof Double) return;
+        if (left instanceof Double && right instanceof Double) {
+            return;
+        }
+        if (left instanceof Integer && right instanceof Integer) {
+            return;
+        }
         throw new RuntimeError(operator, "Numbers dapat ang mga operands.");
     }
 
     private boolean isTruthy(Object object) {
         if (object == null) return false;
         if (object instanceof Boolean) return (boolean)object;
+        if (object instanceof String) {
+            return object.equals("OO");
+        }
         return true;
     }
 
@@ -315,6 +324,9 @@ public class Interpreter implements Expr.Visitor, Stmt.Visitor<Void> {
         Object right = evaluate(expr.right);
 
         switch (expr.operator.getTokenType()) {
+            case MODULO:
+                checkNumberOperands(expr.operator, left, right);
+                return (double)(Math.floorMod(((Number)left).intValue(), ((Number)right).intValue()));
             case MINUS:
                 checkNumberOperands(expr.operator, left, right);
                 return (double)left - (double)right;

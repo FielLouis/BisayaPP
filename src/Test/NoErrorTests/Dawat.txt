@@ -1,12 +1,5 @@
 SUGOD
-	MUGNA NUMERO a = 1
-	MUGNA NUMERO eNd
-	DAWAT: eNd
-	ALANG SA (a=1, a<=eNd, a++)
-	PUNDOK{
-		KUNG (a%2 <> 0)
-		PUNDOK{
-		    IPAKITA: a & $
-		}
-	}
+	MUGNA LETRA a='a', b='b', c
+	c='c'
+	IPAKITA: a & [[] & c
 KATAPUSAN

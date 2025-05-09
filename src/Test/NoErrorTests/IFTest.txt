@@ -1,6 +1,6 @@
 SUGOD
-    MUGNA NUMERO x = 10
-    MUGNA TINUOD y = "OO"
+    MUGNA NUMERO x = 1
+    MUGNA TINUOD y = "DILI"
     MUGNA TINUOD z = "DILI"
     KUNG(z O y)
     PUNDOK{

@@ -36,6 +36,7 @@ public class Iskaner {
         keywords.put("SAMTANG", TokenType.WHILE);
         keywords.put("UG",TokenType.AND);
         keywords.put("O",TokenType.OR);
+        keywords.put("DILI", TokenType.NOT);
     }
 
     List<Token> scanTokens() {

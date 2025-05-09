@@ -9,7 +9,8 @@ import LexicalAnalyzer.Token;
 import LexicalAnalyzer.TokenType;
 
 public class Parser {
-    private static class ParseError extends RuntimeException {}
+    public static class ParseError extends RuntimeException {
+    }
     private  final List<Token> tokens;
     private int current = 0;
 
@@ -161,7 +162,25 @@ public class Parser {
     }
 
     private Stmt printStatement() {
+        int beforeExpr = current;
+
         Expr value = expression();
+
+        if (!isAtEnd() && !check(TokenType.NEXT_LINE) && !check(TokenType.RBRACE)) {
+            Token token = peek();
+
+            if (token.getTokenType() == TokenType.IDENTIFIER ||
+                    token.getTokenType() == TokenType.STRING ||
+                    token.getTokenType() == TokenType.NUMBER ||
+                    token.getTokenType() == TokenType.CHARACTER ||
+                    token.getTokenType() == TokenType.BOOL_TRUE ||
+                    token.getTokenType() == TokenType.BOOL_FALSE ||
+                    token.getTokenType() == TokenType.LPAREN) {
+
+                throw error(token, "Expected '&' sa tunga sa mga variable/expression sa IPAKITA statement.");
+            }
+        }
+
         return new Stmt.Print(value);
     }
 
@@ -275,7 +294,7 @@ public class Parser {
     private Expr term() {
         Expr expr = factor();
 
-        while (match(TokenType.MINUS, TokenType.PLUS, TokenType.CONCAT, TokenType.NEXT_LINE)) {
+        while (match(TokenType.MINUS, TokenType.PLUS, TokenType.CONCAT, TokenType.NEXT_LINE, TokenType.MODULO)) {
             Token operator = previous();
             Expr right = factor();
             expr = new Expr.Binary(expr, operator, right);
@@ -286,7 +305,7 @@ public class Parser {
     private Expr factor() {
         Expr expr = unary();
 
-        while (match(TokenType.DIVIDE, TokenType.MULTIPLY)) {
+        while (match(TokenType.DIVIDE, TokenType.MULTIPLY, TokenType.MODULO)) {
             Token operator = previous();
             Expr right = unary();
             expr = new Expr.Binary(expr, operator, right);

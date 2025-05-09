@@ -27,7 +27,7 @@ public class Environment {
 
         if(enclosing != null) return enclosing.get(name);
 
-        throw new RuntimeError(name, "Unsa ni sya '" + name.getLexeme() + "'.");
+        throw new RuntimeError(name, "Unsa ni sya '" + name.getLexeme() + "'?");
     }
 
     void assign(Token name, Object value) {
